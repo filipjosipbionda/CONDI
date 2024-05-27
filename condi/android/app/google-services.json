@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "510545516428",
+    "project_id": "condi-523a0",
+    "storage_bucket": "condi-523a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510545516428:android:1008aa036a16db706ee8a9",
+        "android_client_info": {
+          "package_name": "com.example.condi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcMyV4dquQM96zAUrfQJosWDS-7jMe56U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
