@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:condi/models/exam.dart';
-import 'package:condi/screens/exam_selection_screen.dart';
+import 'package:condi/screens/exam_screens/exam_selection_screen.dart';
 import 'package:condi/widgets/conditional_card.dart';
 import 'package:condi/widgets/exam_tile.dart';
 import 'package:flutter/material.dart';

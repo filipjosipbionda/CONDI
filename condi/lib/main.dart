@@ -2,7 +2,7 @@ import 'package:condi/models/exam.dart';
 import 'package:condi/models/question.dart';
 import 'package:condi/models/result.dart';
 import 'package:condi/providers/image_cache_provider.dart';
-import 'package:condi/screens/auth_page.dart';
+import 'package:condi/screens/auth/auth_page.dart';
 import 'package:condi/services/exam_service.dart';
 import 'package:condi/services/result_service.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:condi/components/app_logo.dart';
-import 'package:condi/screens/login_screen.dart';
-import 'package:condi/screens/materials_screen.dart';
+import 'package:condi/screens/auth/login_screen.dart';
+import 'package:condi/screens/home/materials_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

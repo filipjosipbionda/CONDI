@@ -1,5 +1,5 @@
-import 'package:condi/screens/conditional_usage_screen.dart';
-import 'package:condi/screens/form_screen.dart';
+import 'package:condi/screens/conditional_screens/conditional_usage_screen.dart';
+import 'package:condi/screens/theory_screens/form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

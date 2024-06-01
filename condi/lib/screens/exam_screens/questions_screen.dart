@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:condi/models/question.dart';
 import 'package:condi/models/result.dart';
-import 'package:condi/screens/results_screen.dart';
+import 'package:condi/screens/exam_screens/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

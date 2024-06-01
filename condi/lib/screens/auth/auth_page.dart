@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:condi/screens/home_screen.dart';
-import 'package:condi/screens/login_screen.dart';
-import 'package:condi/screens/username_input_screen.dart';
+import 'package:condi/screens/auth/login_screen.dart';
+import 'package:condi/screens/auth/username_input_screen.dart';
+import 'package:condi/screens/home/home_screen.dart';
 import 'package:condi/services/exam_service.dart';
 import 'package:condi/services/result_service.dart'; // Import ResultService
 import 'package:firebase_auth/firebase_auth.dart';

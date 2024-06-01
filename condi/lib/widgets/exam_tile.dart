@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:condi/models/exam.dart';
 import 'package:condi/providers/image_cache_provider.dart';
-import 'package:condi/screens/questions_screen.dart';
+import 'package:condi/screens/exam_screens/questions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

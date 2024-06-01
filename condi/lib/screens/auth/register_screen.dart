@@ -1,8 +1,8 @@
 import 'package:condi/components/app_logo.dart';
 import 'package:condi/components/login_text_field.dart';
 import 'package:condi/components/square_tile.dart';
-import 'package:condi/screens/login_screen.dart';
-import 'package:condi/screens/username_input_screen.dart';
+import 'package:condi/screens/auth/login_screen.dart';
+import 'package:condi/screens/auth/username_input_screen.dart';
 import 'package:condi/services/auth_services.dart';
 import 'package:condi/widgets/animated_login_text_field_container.dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';

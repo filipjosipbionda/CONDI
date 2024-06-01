@@ -1,6 +1,6 @@
-import 'package:condi/screens/conditional_form_screen.dart';
-import 'package:condi/screens/conditional_negation_form_screen.dart';
-import 'package:condi/screens/conditional_question_form_screen.dart';
+import 'package:condi/screens/conditional_screens/conditional_form_screen.dart';
+import 'package:condi/screens/conditional_screens/conditional_negation_form_screen.dart';
+import 'package:condi/screens/conditional_screens/conditional_question_form_screen.dart';
 import 'package:flutter/material.dart';
 
 class FormScreen extends StatefulWidget {

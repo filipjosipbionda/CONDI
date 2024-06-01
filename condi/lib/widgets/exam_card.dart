@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:condi/models/exam.dart';
-import 'package:condi/screens/questions_screen.dart';
+import 'package:condi/screens/exam_screens/questions_screen.dart';
 import 'package:condi/widgets/user_results_showdown.dart'; // Import the UserResultsShowdown widget
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
