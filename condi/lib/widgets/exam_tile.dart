@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:condi/models/exam.dart';
-import 'package:condi/providers/image_cache_provider.dart';
 import 'package:condi/screens/exam_screens/questions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class ExamTile extends StatelessWidget {
   final Exam exam;
@@ -29,8 +27,6 @@ class ExamTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageCacheProvider = Provider.of<ImageCacheProvider>(context);
-
     return InkWell(
       onDoubleTap: () {
         _openExam(context);

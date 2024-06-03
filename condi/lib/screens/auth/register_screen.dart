@@ -8,6 +8,7 @@ import 'package:condi/widgets/animated_login_text_field_container.dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -26,6 +27,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
+          actions: const [
+            Text('Got it'),
+          ],
           alignment: Alignment.center,
           title: Text(
             message,
@@ -67,6 +71,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Navigator.pop(context);
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => UsernameInputScreen()));
+  }
+
+  void signInWithGoogle() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser != null) {
+      final String email = googleUser.email;
+      bool userExists = await AuthService().checkIfUserExistsByEmail(email);
+      Navigator.pop(context);
+
+      if (userExists) {
+        await GoogleSignIn().signOut(); // Odjavi korisnika sa Google naloga
+        showErrorMessage('User with that email already exists. Please log in.');
+      } else {
+        // Ako korisnik ne postoji, nastavi sa stvarnom prijavom
+        User? user = await AuthService().signInWithGoogle();
+        if (user != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UsernameInputScreen(),
+            ),
+          );
+        } else {
+          showErrorMessage('Google sign in failed. Please try again.');
+        }
+      }
+    } else {
+      Navigator.pop(context);
+      showErrorMessage('Google sign in failed. Please try again.');
+    }
   }
 
   @override
@@ -205,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SquareTile(
-                      onTap: () => AuthService().signInWithGoogle(),
+                      onTap: signInWithGoogle,
                       imagePath: 'lib/images/google.png'),
                   const SizedBox(
                     width: 32,

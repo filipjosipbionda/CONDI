@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:condi/models/result.dart';
 
 class ResultService extends ChangeNotifier {
-  List<Result> _results = [];
+  final List<Result> _results = [];
   final CollectionReference resultCollection =
       FirebaseFirestore.instance.collection('results');
 

@@ -1,6 +1,7 @@
 import 'package:condi/components/app_logo.dart';
 import 'package:condi/screens/auth/login_screen.dart';
 import 'package:condi/screens/home/materials_screen.dart';
+import 'package:condi/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       print('User logging out!');
 
-      await FirebaseAuth.instance.signOut();
+      AuthService().signOut();
       Navigator.of(context).pushReplacement(_returnToLoginScreen());
     } on FirebaseAuthException catch (e) {
       print(e.message);
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
         ],
       ),
-      body: MaterialsScreen(),
+      body: const MaterialsScreen(),
     );
   }
 

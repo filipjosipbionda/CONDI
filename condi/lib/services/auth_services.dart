@@ -5,6 +5,9 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   Future<void> saveUserData(User user) async {
     try {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
@@ -16,12 +19,15 @@ class AuthService {
     }
   }
 
-  Future<bool> checkIfUserExists(String uid) async {
+  Future<bool> checkIfUserExistsByEmail(String email) async {
     try {
-      // Provjerite postoji li korisnik s određenim UID-om u kolekciji "users"
-      DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      return snapshot.exists;
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      return snapshot.docs.isNotEmpty;
     } catch (error) {
       print("Error checking user existence: $error");
       return false;
@@ -53,24 +59,37 @@ class AuthService {
     }
   }
 
-  signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<GoogleSignInAccount?> getGoogleUser() async {
+    try {
+      return await _googleSignIn.signIn();
+    } catch (error) {
+      print('Error getting Google user: $error');
+      return null;
+    }
+  }
+
+  Future<User?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+    if (googleUser == null) return null;
 
     final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+        await googleUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    User user = FirebaseAuth.instance.currentUser!;
+    UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+    User user = userCredential.user!;
 
-    bool userExists = await checkIfUserExists(user.uid);
+    bool userExists = await checkIfUserExistsByEmail(user.email!);
     if (!userExists) {
       saveUserData(user);
     }
+    return user;
   }
 
   Future<void> signInWithFacebook(BuildContext context) async {
@@ -84,7 +103,7 @@ class AuthService {
 
       User user = FirebaseAuth.instance.currentUser!;
 
-      bool userExists = await checkIfUserExists(user.uid);
+      bool userExists = await checkIfUserExistsByEmail(user.email!);
 
       if (!userExists) {
         saveUserData(user);
@@ -108,6 +127,16 @@ class AuthService {
           ],
         ),
       );
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+      await _googleSignIn.signOut();
+      print('User signed out!');
+    } catch (e) {
+      print('Error signing out: $e');
     }
   }
 }

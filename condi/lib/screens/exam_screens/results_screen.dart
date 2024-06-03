@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:condi/models/result.dart';
 import 'package:condi/widgets/user_answers_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
