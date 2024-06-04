@@ -27,13 +27,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          actions: const [
-            Text('Got it'),
+          actions: [
+            GestureDetector(
+              child: Text(
+                'Got it',
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ],
           alignment: Alignment.center,
           title: Text(
             message,
-            style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w700),
+            style: GoogleFonts.inter(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         );
       },
@@ -70,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     AuthService().saveUserData(user);
     Navigator.pop(context);
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => UsernameInputScreen()));
+        MaterialPageRoute(builder: (context) =>  UsernameInputScreen()));
   }
 
   void signInWithGoogle() async {
@@ -100,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => UsernameInputScreen(),
+              builder: (context) =>  UsernameInputScreen(),
             ),
           );
         } else {
@@ -224,7 +238,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return const LinearGradient(
                             colors: [
                               Color.fromARGB(255, 159, 99, 255),
-                              Colors.orange
+                              Colors.purple
                             ], // Promijenite boje prema potrebi
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
@@ -237,7 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     const Expanded(
-                      child: Divider(color: Colors.orange, thickness: 0.5),
+                      child: Divider(color: Colors.purple, thickness: 0.5),
                     ),
                   ],
                 ),
@@ -245,19 +259,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(
                 height: 40,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 159, 99, 255), width: 8),
+                ),
+                child:
                   SquareTile(
-                      onTap: signInWithGoogle,
-                      imagePath: 'lib/images/google.png'),
-                  const SizedBox(
-                    width: 32,
-                  ),
-                  SquareTile(
-                      onTap: () => AuthService().signInWithFacebook(context),
-                      imagePath: 'lib/images/facebook.png'),
-                ],
+                    onTap: signInWithGoogle,
+                    imagePath: 'lib/images/google.png',
+                  
+                ),
+              ),
+              const SizedBox(
+                width: 32,
               ),
               const SizedBox(
                 height: 50,
@@ -268,7 +284,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Text(
                     'Already have an account?',
                     style: GoogleFonts.inter(
-                        fontSize: 14, color: Color.fromARGB(255, 159, 99, 255)),
+                        fontSize: 14,
+                        color: const Color.fromARGB(255, 159, 99, 255)),
                   ),
                   const SizedBox(
                     width: 5,

@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBody: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Colors.white,
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

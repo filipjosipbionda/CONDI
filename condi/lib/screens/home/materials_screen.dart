@@ -49,7 +49,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
     List<Exam> randomExams = _getTwoRandomExams(examService.exams);
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       extendBody: true,
       body: ListView(
         children: [

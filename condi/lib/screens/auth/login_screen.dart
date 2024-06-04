@@ -24,27 +24,27 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (ctx) {
-        return SizedBox(
-          width: 300,
-          child: AlertDialog(
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Ok'),
-              ),
-            ],
-            alignment: Alignment.center,
-            title: Container(
-              alignment: Alignment.center,
+        return AlertDialog(
+          actions: [
+            GestureDetector(
               child: Text(
-                message,
+                'Got it',
                 style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+          alignment: Alignment.center,
+          title: Text(
+            message,
+            style: GoogleFonts.inter(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
             ),
           ),
         );
@@ -53,6 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void signUserIn() async {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      showErrorMessage('Please enter your email and password');
+      return;
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -61,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       },
     );
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
@@ -84,13 +90,14 @@ class _LoginScreenState extends State<LoginScreen> {
         showErrorMessage('Incorrect Password');
       }
     }
-    emailController.clear();
+
     passwordController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -224,47 +231,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SquareTile(
-                    onTap: () async {
-                      try {
-                        await AuthService().signInWithGoogle();
-                        User? user = FirebaseAuth.instance.currentUser;
-                        if (user != null) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) {
-                              return const HomeScreen();
-                            }),
-                          );
-                        }
-                      } catch (e) {
-                        showErrorMessage('Google sign-in failed');
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(width: 8,color:const Color.fromARGB(255, 159, 99, 255),),
+                ),
+                child: SquareTile(
+                  onTap: () async {
+                    try {
+                      await AuthService().signInWithGoogle();
+                      User? user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                            return const HomeScreen();
+                          }),
+                        );
                       }
-                    },
-                    imagePath: 'lib/images/google.png',
-                  ),
-                  const SizedBox(width: 32),
-                  SquareTile(
-                    onTap: () async {
-                      try {
-                        await AuthService().signInWithFacebook(context);
-                        User? user = FirebaseAuth.instance.currentUser;
-                        if (user != null) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) {
-                              return const HomeScreen();
-                            }),
-                          );
-                        }
-                      } catch (e) {
-                        showErrorMessage('Facebook sign-in failed');
-                      }
-                    },
-                    imagePath: 'lib/images/facebook.png',
-                  ),
-                ],
+                    } catch (e) {
+                      showErrorMessage('Google sign-in failed');
+                    }
+                  },
+                  imagePath: 'lib/images/google.png',
+                ),
               ),
               const SizedBox(height: 50),
               Row(

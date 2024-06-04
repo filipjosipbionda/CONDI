@@ -1,10 +1,8 @@
 import 'dart:ui';
-
 import 'package:condi/components/login_text_field.dart';
 import 'package:condi/widgets/animated_login_text_field_container.dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -17,6 +15,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final emailController = TextEditingController();
   bool userExist = true;
+  bool isFieldEmpty = false;
 
   Future<bool> checkIfEmailExists(String email) async {
     try {
@@ -29,10 +28,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
-  void sendEmailFoPasswordReset(String email) async {
+  void sendEmailForPasswordReset(String email) async {
+    if (email.isEmpty) {
+      setState(() {
+        isFieldEmpty = true;
+        userExist = true;  // Reset userExist to true to avoid displaying user not found message
+      });
+      return;
+    }
+
     if (await checkIfEmailExists(email)) {
       setState(() {
         userExist = true;
+        isFieldEmpty = false;
         FirebaseAuth.instance.sendPasswordResetEmail(email: email);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -44,6 +52,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     } else {
       setState(() {
         userExist = false;
+        isFieldEmpty = false;
       });
     }
   }
@@ -71,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               Text(
                 "We will send you an email with a link to\nreset your password."
-                " Please enter the email \nassociated with your account bellow",
+                " Please enter the email \nassociated with your account below",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   fontSize: 14,
@@ -92,7 +101,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     obscureText: false),
               ),
               Visibility(
-                visible: !userExist,
+                visible: isFieldEmpty,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10, top: 2),
+                      child: Text(
+                        'Please enter your email address!',
+                        style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.error,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: !isFieldEmpty && !userExist,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -109,10 +136,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  sendEmailFoPasswordReset(emailController.text);
+                  sendEmailForPasswordReset(emailController.text);
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,

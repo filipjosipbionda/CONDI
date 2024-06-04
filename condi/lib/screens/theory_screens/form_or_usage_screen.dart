@@ -35,6 +35,7 @@ class _FormOrUsageScreenState extends State<FormOrUsageScreen>
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+
         title: Text(
           widget.conditionalType,
           style: GoogleFonts.inter(

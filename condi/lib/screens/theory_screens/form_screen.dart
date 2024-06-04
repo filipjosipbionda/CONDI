@@ -31,10 +31,11 @@ class _FormScreenState extends State<FormScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           TabBar(
+
             labelColor: const Color.fromARGB(255, 159, 99, 255),
             controller: _tabController,
             tabs: const [
@@ -45,6 +46,7 @@ class _FormScreenState extends State<FormScreen>
           ),
           Expanded(
             child: TabBarView(
+
               controller: _tabController,
               children: [
                 Padding(

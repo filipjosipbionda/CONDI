@@ -92,43 +92,7 @@ class AuthService {
     return user;
   }
 
-  Future<void> signInWithFacebook(BuildContext context) async {
-    try {
-      final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-
-      User user = FirebaseAuth.instance.currentUser!;
-
-      bool userExists = await checkIfUserExistsByEmail(user.email!);
-
-      if (!userExists) {
-        saveUserData(user);
-      }
-    } catch (error) {
-      print("Error signing in with Facebook: $error");
-
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text(
-              'User with that email already exists. Try signing in with email or Gmail!'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
 
   Future<void> signOut() async {
     try {

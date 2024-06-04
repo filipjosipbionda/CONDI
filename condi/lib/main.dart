@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData().copyWith(
+          scaffoldBackgroundColor: Colors.white,
           colorScheme: kColorScheme,
           appBarTheme: const AppBarTheme().copyWith(
             backgroundColor: kColorScheme.onPrimaryContainer,

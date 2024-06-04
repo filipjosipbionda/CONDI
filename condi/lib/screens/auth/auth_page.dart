@@ -19,14 +19,16 @@ class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
     super.initState();
-    _fetchData(); // Call the unified method to fetch data
+    _checkUserAndFetchData(); // Call the unified method to check user and fetch data
   }
 
-  Future<void> _fetchData() async {
+  Future<void> _checkUserAndFetchData() async {
     final user = FirebaseAuth.instance.currentUser;
-    await Provider.of<ExamService>(context, listen: false).fetchExams();
-    await Provider.of<ResultService>(context, listen: false)
-        .fetchAllResults(user!.uid);
+    if (user != null) {
+      await Provider.of<ExamService>(context, listen: false).fetchExams();
+      await Provider.of<ResultService>(context, listen: false)
+          .fetchAllResults(user.uid);
+    }
   }
 
   @override
