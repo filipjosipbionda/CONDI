@@ -234,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 8,color:const Color.fromARGB(255, 159, 99, 255),),
+                  border: Border.all(width: 5,color:const Color.fromARGB(255, 159, 99, 255),),
                 ),
                 child: SquareTile(
                   onTap: () async {

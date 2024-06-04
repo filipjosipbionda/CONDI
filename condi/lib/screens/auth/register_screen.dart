@@ -263,7 +263,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                      color: const Color.fromARGB(255, 159, 99, 255), width: 8),
+                      color: const Color.fromARGB(255, 159, 99, 255), width: 5),
                 ),
                 child:
                   SquareTile(
