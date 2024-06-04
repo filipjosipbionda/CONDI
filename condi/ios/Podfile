@@ -31,12 +31,16 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Dodajte Firebase zavisnosti ovde
+
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
   pod 'Firebase/Analytics'
-  # Dodajte ostale zavisnosti koje koristite
+  pod 'FBSDKCoreKit'
+  pod 'FBSDKLoginKit'
+
+ 
+
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 

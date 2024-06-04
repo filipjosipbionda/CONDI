@@ -18,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
 
   void showErrorMessage(String message) {
@@ -30,10 +29,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: AlertDialog(
             actions: [
               TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Ok'))
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Ok'),
+              ),
             ],
             alignment: Alignment.center,
             title: Container(
@@ -41,7 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 message,
                 style: GoogleFonts.inter(
-                    fontSize: 16, fontWeight: FontWeight.w400),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),
@@ -52,25 +54,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void signUserIn() async {
     showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      print('User succesfuly signed in!');
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      print('User successfully signed in!');
       Navigator.pop(context);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
     } on FirebaseAuthException catch (error) {
       Navigator.pop(context);
-
       print(error.code);
       if (error.code == 'user-not-found') {
         showErrorMessage('Incorrect Email');
@@ -91,9 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 300,
-              ),
+              const SizedBox(height: 300),
               const AppLogo(
                 colorLeft: Color.fromARGB(255, 159, 99, 255),
                 colorRight: Colors.purple,
@@ -105,9 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.black.withOpacity(0.6),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Column(
                 children: [
                   AnimatedLoginTextFieldContainer(
@@ -122,9 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: 'email',
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   AnimatedLoginTextFieldContainer(
                     width: 300,
                     height: 50,
@@ -136,12 +135,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: passwordController,
                       hintText: 'password',
                     ),
-                  )
+                  ),
                 ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
+              const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
                 child: Row(
@@ -152,41 +149,41 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (ctx) => ForgotPasswordScreen()),
+                            builder: (ctx) => ForgotPasswordScreen(),
+                          ),
                         );
                       },
                       child: Text(
                         'Forgot password?',
                         style: GoogleFonts.inter(
-                            fontSize: 14,
-                            color: Color.fromARGB(255, 159, 99, 255)
-                                .withOpacity(0.75)),
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 159, 99, 255)
+                              .withOpacity(0.75),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 6,
-              ),
+              const SizedBox(height: 6),
               ElevatedButton(
                 onPressed: signUserIn,
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    fixedSize: const Size(200, 46),
-                    shadowColor: Colors.grey,
-                    elevation: 5),
+                  backgroundColor: Colors.black,
+                  fixedSize: const Size(200, 46),
+                  shadowColor: Colors.grey,
+                  elevation: 5,
+                ),
                 child: Text(
                   'Sign in',
                   style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
@@ -208,58 +205,79 @@ class _LoginScreenState extends State<LoginScreen> {
                             end: Alignment.centerRight,
                           ).createShader(bounds);
                         },
-                        child: Text('Or continue with',
-                            style: GoogleFonts.inter(
-                                fontSize: 12, fontWeight: FontWeight.w700)),
+                        child: Text(
+                          'Or continue with',
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ),
                     const Expanded(
                       child: Divider(
-                          color: Color.fromARGB(255, 159, 99, 255),
-                          thickness: 0.5),
+                        color: Color.fromARGB(255, 159, 99, 255),
+                        thickness: 0.5,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SquareTile(
-                      onTap: () async {
-                        AuthService().signInWithGoogle().then(((value) =>
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (_) {
+                    onTap: () async {
+                      try {
+                        await AuthService().signInWithGoogle();
+                        User? user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
                               return const HomeScreen();
-                            }))));
-                      },
-                      imagePath: 'lib/images/google.png'),
-                  const SizedBox(
-                    width: 32,
+                            }),
+                          );
+                        }
+                      } catch (e) {
+                        showErrorMessage('Google sign-in failed');
+                      }
+                    },
+                    imagePath: 'lib/images/google.png',
                   ),
+                  const SizedBox(width: 32),
                   SquareTile(
-                    onTap: () => AuthService().signInWithFacebook(context),
+                    onTap: () async {
+                      try {
+                        await AuthService().signInWithFacebook(context);
+                        User? user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
+                              return const HomeScreen();
+                            }),
+                          );
+                        }
+                      } catch (e) {
+                        showErrorMessage('Facebook sign-in failed');
+                      }
+                    },
                     imagePath: 'lib/images/facebook.png',
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 50,
-              ),
+              const SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Not a member yet?',
                     style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: const Color.fromARGB(255, 159, 99, 255)),
+                      fontSize: 14,
+                      color: const Color.fromARGB(255, 159, 99, 255),
+                    ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context)
@@ -268,16 +286,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'Register now',
                       style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
