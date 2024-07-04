@@ -55,6 +55,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void signUserUp() async {
+    // Check if all fields are filled
+    if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty) {
+      showErrorMessage('Please fill in all fields.');
+      return;
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -70,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: emailController.text, password: passwordController.text);
         print('User successfully signed up!');
       } else {
-        Navigator.pop(context); // Uklonite CircularProgressIndicator
+        Navigator.pop(context); // Remove CircularProgressIndicator
         showErrorMessage('Passwords don\'t match');
         return;
       }
@@ -84,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     AuthService().saveUserData(user);
     Navigator.pop(context);
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) =>  UsernameInputScreen()));
+        MaterialPageRoute(builder: (context) => UsernameInputScreen()));
   }
 
   void signInWithGoogle() async {
@@ -114,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>  UsernameInputScreen(),
+              builder: (context) => UsernameInputScreen(),
             ),
           );
         } else {
@@ -137,7 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
-                height: 260,
+                height: 200,
               ),
               const AppLogo(
                 colorLeft: Color.fromARGB(255, 159, 99, 255),
@@ -265,11 +273,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   border: Border.all(
                       color: const Color.fromARGB(255, 159, 99, 255), width: 5),
                 ),
-                child:
-                  SquareTile(
-                    onTap: signInWithGoogle,
-                    imagePath: 'lib/images/google.png',
-                  
+                child: SquareTile(
+                  onTap: signInWithGoogle,
+                  imagePath: 'lib/images/google.png',
                 ),
               ),
               const SizedBox(

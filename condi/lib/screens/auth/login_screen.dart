@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 300),
+              const SizedBox(height: 260),
               const AppLogo(
                 colorLeft: Color.fromARGB(255, 159, 99, 255),
                 colorRight: Colors.purple,
@@ -234,7 +234,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(width: 5,color:const Color.fromARGB(255, 159, 99, 255),),
+                  border: Border.all(
+                    width: 5,
+                    color: const Color.fromARGB(255, 159, 99, 255),
+                  ),
                 ),
                 child: SquareTile(
                   onTap: () async {
@@ -255,7 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   imagePath: 'lib/images/google.png',
                 ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -283,7 +286,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
             ],
           ),
         ),
