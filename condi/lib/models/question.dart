@@ -27,3 +27,22 @@ class Question {
     required this.answersMainClause,
   });
 }
+
+extension QuestionComparison on Question {
+  bool isEqual(Question other) {
+    if (text != other.text) return false;
+    if (ifClauseCorrectAnswer != other.ifClauseCorrectAnswer) return false;
+    if (mainClauseCorrectAnswer != other.mainClauseCorrectAnswer) return false;
+    if (!_compareStringLists(answersIfClause, other.answersIfClause)) return false;
+    if (!_compareStringLists(answersMainClause, other.answersMainClause)) return false;
+    return true;
+  }
+
+  bool _compareStringLists(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:condi/components/login_text_field.dart';
+import 'package:condi/screens/home/home_background.dart';
 import 'package:condi/screens/home/home_screen.dart';
 import 'package:condi/services/auth_services.dart';
 import 'package:condi/widgets/animated_login_text_field_container.dart.dart';
@@ -107,7 +108,7 @@ class UsernameInputScreen extends StatelessWidget {
   Route _openHomeScreen() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const HomeScreen(),
+          const HomeBackground(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1, 0);
         const end = Offset.zero;

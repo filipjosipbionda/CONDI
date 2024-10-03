@@ -27,6 +27,10 @@ void main() async {
   Hive.registerAdapter(QuestionAdapter());
   Hive.registerAdapter(ResultAdapter());
 
+  // Otvorite Hive Box-ove
+  await Hive.openBox<Exam>('firebase-exams');
+  await Hive.openBox<Result>('results');
+
   runApp(
     const MyApp(),
   );
@@ -47,7 +51,6 @@ class MyApp extends StatelessWidget {
           create: (_) => ImageCacheProvider(),
         ),
         ChangeNotifierProvider<ResultService>(
-          // Add this provider
           create: (_) => ResultService(),
         ),
       ],

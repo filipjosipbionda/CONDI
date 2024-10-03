@@ -31,6 +31,9 @@ class UserResultsShowdown extends StatelessWidget {
           }
 
           var results = snapshot.data!;
+          Provider.of<ResultService>(context, listen: false)
+              .syncResultsIfChanged(user.uid, examTitle);
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

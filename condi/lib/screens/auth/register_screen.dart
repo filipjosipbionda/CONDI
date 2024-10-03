@@ -21,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   void showErrorMessage(String message) {
     showDialog(
@@ -74,25 +75,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        print('User successfully signed up!');
+        User? user = await _authService.signUpWithEmailAndPassword(
+          emailController.text,
+          passwordController.text,
+        );
+        if (user != null) {
+          print('User successfully signed up!');
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => UsernameInputScreen()),
+          );
+        }
       } else {
         Navigator.pop(context); // Remove CircularProgressIndicator
         showErrorMessage('Passwords don\'t match');
-        return;
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       showErrorMessage(e.message!);
-      return;
     }
-
-    final User user = FirebaseAuth.instance.currentUser!;
-    AuthService().saveUserData(user);
-    Navigator.pop(context);
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => UsernameInputScreen()));
   }
 
   void signInWithGoogle() async {
@@ -109,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (googleUser != null) {
       final String email = googleUser.email;
-      bool userExists = await AuthService().checkIfUserExistsByEmail(email);
+      bool userExists = await _authService.checkIfUserExistsByEmail(email);
       Navigator.pop(context);
 
       if (userExists) {
@@ -117,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         showErrorMessage('User with that email already exists. Please log in.');
       } else {
         // Ako korisnik ne postoji, nastavi sa stvarnom prijavom
-        User? user = await AuthService().signInWithGoogle();
+        User? user = await _authService.signInWithGoogle();
         if (user != null) {
           Navigator.pushReplacement(
             context,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:condi/screens/home/home_background.dart';
 import 'package:condi/screens/home/home_screen.dart';
 import 'package:condi/screens/auth/login_screen.dart';
 import 'package:condi/screens/auth/username_input_screen.dart';
@@ -25,7 +26,8 @@ class _AuthPageState extends State<AuthPage> {
   Future<void> _checkUserAndFetchData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await Provider.of<ExamService>(context, listen: false).fetchExams();
+      final examService = Provider.of<ExamService>(context, listen: false);
+    await examService.initializeExams();
       await Provider.of<ResultService>(context, listen: false)
           .fetchAllResults(user.uid);
     }
@@ -55,7 +57,7 @@ class _AuthPageState extends State<AuthPage> {
                 final usernameExists =
                     userData != null && userData['username'] != null;
                 if (usernameExists) {
-                  return const HomeScreen();
+                  return const HomeBackground();
                 } else {
                   return UsernameInputScreen();
                 }

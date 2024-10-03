@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -92,7 +90,31 @@ class AuthService {
     return user;
   }
 
+  Future<User?> signUpWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User user = userCredential.user!;
+      saveUserData(user);
+      return user;
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
+  }
 
+  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
+  }
 
   Future<void> signOut() async {
     try {

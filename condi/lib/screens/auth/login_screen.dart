@@ -2,7 +2,7 @@ import 'package:condi/components/app_logo.dart';
 import 'package:condi/components/login_text_field.dart';
 import 'package:condi/components/square_tile.dart';
 import 'package:condi/screens/auth/forgot_password_screen.dart';
-import 'package:condi/screens/home/home_screen.dart';
+import 'package:condi/screens/home/home_background.dart';
 import 'package:condi/screens/auth/register_screen.dart';
 import 'package:condi/services/auth_services.dart';
 import 'package:condi/widgets/animated_login_text_field_container.dart.dart';
@@ -19,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   void showErrorMessage(String message) {
     showDialog(
@@ -68,21 +69,23 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
+      User? user = await _authService.signInWithEmailAndPassword(
+        emailController.text,
+        passwordController.text,
       );
-      print('User successfully signed in!');
+
       Navigator.pop(context);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-      );
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeBackground(),
+          ),
+        );
+      }
     } on FirebaseAuthException catch (error) {
       Navigator.pop(context);
-      print(error.code);
+
       if (error.code == 'user-not-found') {
         showErrorMessage('Incorrect Email');
       } else if (error.code == 'wrong-password') {
@@ -92,6 +95,31 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     passwordController.clear();
+  }
+
+  void signInWithGoogle() async {
+    try {
+      User? user = await _authService.signInWithGoogle();
+      if (user == null) {
+        showErrorMessage('Google sign-in cancelled');
+        return;
+      }
+
+      bool userExists = await _authService.checkIfUserExistsByEmail(user.email!);
+      if (!userExists) {
+        showErrorMessage('Please register before signing in with Google');
+        await _authService.signOut(); // Sign out if user is not registered
+        return;
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return const HomeBackground();
+        }),
+      );
+    } catch (e) {
+      showErrorMessage('Google sign-in failed');
+    }
   }
 
   @override
@@ -240,21 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 child: SquareTile(
-                  onTap: () async {
-                    try {
-                      await AuthService().signInWithGoogle();
-                      User? user = FirebaseAuth.instance.currentUser;
-                      if (user != null) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                            return const HomeScreen();
-                          }),
-                        );
-                      }
-                    } catch (e) {
-                      showErrorMessage('Google sign-in failed');
-                    }
-                  },
+                  onTap: signInWithGoogle,
                   imagePath: 'lib/images/google.png',
                 ),
               ),

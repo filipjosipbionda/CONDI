@@ -17,50 +17,53 @@ class ConditionalUsageScreen extends StatelessWidget {
     var usageExamples = usages['usageExamples'] as List<Widget>;
     var usageDefinitions = usages['usageDefinitions'] as List<Widget>;
 
-    return Column(
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              '${conditionalType} is used: ',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
               ),
-            ),
-          ],
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: usageDefinitions.length,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: [
-                  UsageSection(
-                    usageDefinition: usageDefinitions[index],
-                    usageExample: usageExamples[index],
-                  ),
-                  if (index + 1 != usageDefinitions.length)
-                    const Divider(
-                      height: 40,
-                    )
-                  else
-                    const SizedBox(
-                      height: 18,
+              Text(
+                '${conditionalType} is used: ',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: usageDefinitions.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    UsageSection(
+                      usageDefinition: usageDefinitions[index],
+                      usageExample: usageExamples[index],
                     ),
-                ],
+                    if (index + 1 != usageDefinitions.length)
+                      const Divider(
+                        height: 40,
+                      )
+                    else
+                      const SizedBox(
+                        height: 18,
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

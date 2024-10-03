@@ -36,8 +36,7 @@ target 'Runner' do
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
   pod 'Firebase/Analytics'
-  pod 'FBSDKCoreKit'
-  pod 'FBSDKLoginKit'
+ 
 
  
 

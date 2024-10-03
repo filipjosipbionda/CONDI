@@ -1,83 +1,125 @@
-import 'package:condi/components/app_logo.dart';
-import 'package:condi/screens/auth/login_screen.dart';
-import 'package:condi/screens/home/materials_screen.dart';
-import 'package:condi/services/auth_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
+import 'package:condi/models/exam.dart';
+import 'package:condi/screens/exam_screens/exam_selection_screen.dart';
+import 'package:condi/widgets/conditional_card.dart';
+import 'package:condi/widgets/exam_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:condi/services/exam_service.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final user = FirebaseAuth.instance.currentUser;
+  final List<String> conditionals = [
+    'Zero Conditional',
+    'First Conditional',
+    'Second Conditional',
+    'Third Conditional',
+  ];
 
-  void signUserOut() async {
-    try {
-      print('User logging out!');
+  void _openExamScreen(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const ExamSelectionScreen(),
+    ));
+  }
 
-      AuthService().signOut();
-      Navigator.of(context).pushReplacement(_returnToLoginScreen());
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
+  // Funkcija za dobivanje dva slučajna ispita
+  List<Exam> _getTwoRandomExams(List<Exam> exams) {
+    Random random = Random();
+    Set<int> indices = Set();
+
+    while (indices.length < 2 && indices.length < exams.length) {
+      indices.add(random.nextInt(exams.length));
     }
+
+    return indices.map((index) => exams[index]).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    final examService = Provider.of<ExamService>(context);
+
+    // Dobivanje dva slučajna ispita
+    List<Exam> randomExams = _getTwoRandomExams(examService.exams);
+
     return Scaffold(
+      backgroundColor: Colors.white,
       extendBody: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppLogo(
-                  colorLeft: Color.fromARGB(255, 159, 99, 255),
-                  colorRight: Color.fromARGB(255, 225, 131, 241),
+      body: ListView(
+        children: [
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              const SizedBox(width: 10),
+              Text(
+                'Conditionals',
+                style: GoogleFonts.inter(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
+              )
+            ],
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 4,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: ConditionalCard(
+                conditionalType: conditionals[index],
+              ),
             ),
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: signUserOut,
-              icon: Icon(
-                Icons.logout,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ))
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const SizedBox(width: 10),
+              Text(
+                'Exams',
+                style: GoogleFonts.inter(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(flex: 2),
+              GestureDetector(
+                onTap: () {
+                  _openExamScreen(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text(
+                    'View all',
+                    style: GoogleFonts.inter(
+                      color: const Color.fromARGB(255, 159, 99, 255),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          // Prikazivanje dva slučajna ispita
+          ...randomExams
+              .map((exam) => Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ExamTile(exam: exam)))
+              .toList(),
         ],
       ),
-      body: const MaterialsScreen(),
-    );
-  }
-
-  Route _returnToLoginScreen() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          const LoginScreen(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0, 1);
-        const end = Offset.zero;
-
-        const curve = Curves.ease;
-        final curveTween = CurveTween(curve: curve);
-        final tween = Tween(begin: begin, end: end).chain(curveTween);
-
-        final offsetAnimation = animation.drive(tween);
-
-        return SlideTransition(position: offsetAnimation, child: child);
-      },
     );
   }
 }

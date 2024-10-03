@@ -39,3 +39,37 @@ class Exam {
     numberOfQuestions = questions.length;
   }
 }
+
+ extension ExamComparison on Exam {
+  bool isEqual(Exam other) {
+    if (type != other.type) return false;
+    if (title != other.title) return false;
+    if (imageUrl != other.imageUrl) return false;
+    if (description != other.description) return false;
+    if (numberOfQuestions != other.numberOfQuestions) return false;
+    
+    // Uporedba imageData, ako obe nisu null
+    if (imageData != null && other.imageData != null) {
+      if (!_compareImageData(imageData!, other.imageData!)) return false;
+    } else if (imageData != other.imageData) {
+      // Ako jedna od njih nije null, nisu jednake
+      return false;
+    }
+
+    // Uporedba lista pitanja
+    if (questions.length != other.questions.length) return false;
+    for (int i = 0; i < questions.length; i++) {
+      if (!questions[i].isEqual(other.questions[i])) return false;
+    }
+
+    return true;
+  }
+
+  bool _compareImageData(Uint8List a, Uint8List b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+}
